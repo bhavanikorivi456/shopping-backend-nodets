@@ -9,6 +9,7 @@ router.get("/:id", getProductById);
 router.post("/", upload.single("image"), addProduct);
 router.delete("/:id", deleteProduct);
 router.patch("/:id/quantity", updateProductQuantity);
+router.post("/update-quantity", updateProductQuantity);
 router.patch("/:id/description", updateProductDescription);
 
 
