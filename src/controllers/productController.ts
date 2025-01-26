@@ -1,5 +1,6 @@
 import { Request, RequestHandler, Response } from "express";
 import Product, { IProduct } from "../models/Product";
+import mongoose from "mongoose";
 
 
 export const getProducts = async(req: Request, res: Response)=>{
@@ -71,21 +72,30 @@ export const deleteProduct = async (req: Request, res: Response) => {
   };
 
   export const updateProductQuantity: RequestHandler = async (req, res) => {
-    const { id, quantity } = req.body;
+    const { id } = req.params;
+    const { quantity } = req.body;
+  
+    // Check if the provided id is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(400).json({ message: "Invalid product ID format" });
+      return;
+    }
   
     try {
+      // Fetch the product by ID from the database
       const product = await Product.findById(id);
       if (!product) {
         res.status(404).json({ message: "Product not found" });
         return;
       }
   
-      if (product.quantity < quantity) {
-        res.status(400).json({ message: "Insufficient stock" });
-        return;
-      }
+      // Log the current quantity of the product
+      console.log(`Current quantity of product ${product.name}: ${product.quantity}`);
   
-      product.quantity -= quantity; 
+      // Add the requested quantity to the current stock
+      product.quantity += quantity;
+  
+      // Save the updated product
       await product.save();
   
       res.status(200).json({ message: "Quantity updated successfully", product });
@@ -93,4 +103,37 @@ export const deleteProduct = async (req: Request, res: Response) => {
       res.status(500).json({ message: "Failed to update quantity", error });
     }
   };
+
+  export const updateProductDescription: RequestHandler = async (req: Request, res: Response): Promise<void> => {
+    const { id } = req.params;
+    const { description } = req.body;
+  
+    // Check if the provided id is a valid ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      res.status(400).json({ message: "Invalid product ID format" });
+      return;
+    }
+  
+    try {
+      // Fetch the product by ID
+      const product = await Product.findById(id);
+      if (!product) {
+        res.status(404).json({ message: "Product not found" });
+        return;
+      }
+  
+      // Update the description of the product
+      product.description = description;
+  
+      // Save the updated product
+      await product.save();
+  
+      // Return the response without returning a value explicitly
+      res.status(200).json({ message: "Product description updated successfully", product });
+    } catch (error) {
+      // Catch any error that occurs and send the response
+      res.status(500).json({ message: "Failed to update product description", error });
+    }
+  };
+  
   
