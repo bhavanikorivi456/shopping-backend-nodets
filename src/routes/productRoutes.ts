@@ -1,5 +1,5 @@
 import express from "express";
-import { addProduct, deleteProduct, getProductById, getProducts, updateProductDescription, updateProductQuantity } from "../controllers/productController";
+import { addProduct, deleteProduct, getProductById, getProducts, updateProductQuantity } from "../controllers/productController";
 import upload from "../middleware/upload";
 
 const router = express.Router();
@@ -10,7 +10,6 @@ router.post("/", upload.single("image"), addProduct);
 router.delete("/:id", deleteProduct);
 router.patch("/:id/quantity", updateProductQuantity);
 router.post("/update-quantity", updateProductQuantity);
-router.patch("/:id/description", updateProductDescription);
 
 
 export default router;
