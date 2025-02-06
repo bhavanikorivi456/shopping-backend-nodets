@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 const allowedOrigins = [
-  "http://localhost:5174",        // Local development frontend
+  "http://localhost:5173",        // Local development frontend
   "https://shoppingcart-vite-react.netlify.app", // Production frontend
 ];
 
