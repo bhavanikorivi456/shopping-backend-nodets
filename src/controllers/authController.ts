@@ -56,7 +56,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
         return;
       }
   
-      const token = jwt.sign({ id: user._id, role: user.role }, "your_jwt_secret", { expiresIn: "1h" });
+      const token = jwt.sign({ id: user._id, role: user.role }, JWT_SECRET, { expiresIn: "1h" });
   
       res.status(200).json({ token, role: user.role }); // Send role to frontend
     } catch (error) {
