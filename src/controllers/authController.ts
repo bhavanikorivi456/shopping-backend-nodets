@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import User, { IUser } from "../models/User";
 import { validationResult } from "express-validator";
 import dotenv from "dotenv";
+import { AuthRequest } from "../middleware/authMiddleware";
 
 dotenv.config();
 
@@ -62,6 +63,16 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
       res.status(500).json({ message: "Server error" });
     }
   };
+
+  export const getUserData = async (req: AuthRequest, res: Response): Promise<void> => {
+    if (!req.userId) {
+      res.status(400).json({ message: "User ID not found in request" });
+      return;
+    }
+  
+    res.status(200).json({ message: "User data fetched successfully", userId: req.userId });
+  };
+  
 
   export const resetPassword = async (req: Request, res: Response): Promise<void> => {
     try {

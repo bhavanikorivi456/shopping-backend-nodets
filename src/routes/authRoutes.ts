@@ -1,6 +1,7 @@
 import express from "express";
-import { signup, login, resetPassword } from "../controllers/authController";
+import { signup, login, resetPassword, getUserData } from "../controllers/authController";
 import { body } from "express-validator";
+import { authenticate } from "../middleware/authMiddleware";
 
 const router = express.Router();
 
@@ -18,5 +19,7 @@ router.post(
 router.post("/login", login);
 
 router.post("/reset-password", resetPassword);
+
+router.get("/data", authenticate, getUserData);
 
 export default router;
